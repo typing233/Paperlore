@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>纸影谜途 - 剪纸解谜游戏</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 主菜单 -->
+        <div id="main-menu" class="screen active">
+            <div class="menu-bg"></div>
+            <div class="menu-content">
+                <h1 class="title">纸影谜途</h1>
+                <p class="subtitle">剪出真相，传承千年</p>
+                <div class="menu-buttons">
+                    <button class="btn btn-primary" id="start-btn">开始游戏</button>
+                    <button class="btn btn-secondary" id="how-to-play-btn">游戏说明</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 游戏说明 -->
+        <div id="how-to-play" class="screen">
+            <div class="instruction-panel">
+                <h2>游戏说明</h2>
+                <div class="instructions">
+                    <div class="instruction-item">
+                        <span class="instruction-icon">✂️</span>
+                        <p>使用鼠标在画布上裁剪，体验传统剪纸艺术</p>
+                    </div>
+                    <div class="instruction-item">
+                        <span class="instruction-icon">📜</span>
+                        <p>根据诗句提示，剪出相应的图案</p>
+                    </div>
+                    <div class="instruction-item">
+                        <span class="instruction-icon">🔄</span>
+                        <p>运用对称原理，只需裁剪一半即可</p>
+                    </div>
+                    <div class="instruction-item">
+                        <span class="instruction-icon">🐉</span>
+                        <p>探索生肖故事，感受中华文化魅力</p>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="back-to-menu-btn">返回</button>
+            </div>
+        </div>
+
+        <!-- 关卡选择 -->
+        <div id="level-select" class="screen">
+            <h2>选择关卡</h2>
+            <div class="level-grid" id="level-grid">
+            </div>
+            <button class="btn btn-secondary" id="back-to-menu-from-levels-btn">返回主菜单</button>
+        </div>
+
+        <!-- 游戏主界面 -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <div class="level-info">
+                    <span class="level-number">第 <span id="current-level">1</span> 关</span>
+                    <span class="level-theme" id="level-theme">新春系列</span>
+                </div>
+                <div class="game-controls">
+                    <button class="icon-btn" id="undo-btn" title="撤销">↩️</button>
+                    <button class="icon-btn" id="reset-btn" title="重置">🔄</button>
+                    <button class="icon-btn" id="hint-btn" title="提示">💡</button>
+                    <button class="icon-btn" id="pause-btn" title="暂停">⏸️</button>
+                </div>
+            </div>
+
+            <div class="game-main">
+                <!-- 线索区域 -->
+                <div class="clue-panel">
+                    <div class="clue-type" id="clue-type">📜 诗词线索</div>
+                    <div class="clue-content" id="clue-content">
+                        <p class="poem">喜气洋洋抱红鲤，<br>年年有余福满堂。</p>
+                    </div>
+                    <div class="story-panel" id="story-panel">
+                        <h3>生肖故事</h3>
+                        <p id="story-content">在传统剪纸中，胖娃娃抱红鲤寓意"年年有余"，象征着生活富足、吉祥如意。</p>
+                    </div>
+                </div>
+
+                <!-- 画布区域 -->
+                <div class="canvas-container">
+                    <div class="canvas-frame">
+                        <canvas id="paper-canvas" width="500" height="500"></canvas>
+                        <div class="symmetry-line" id="symmetry-line"></div>
+                    </div>
+                    <div class="canvas-controls">
+                        <label class="tool-option">
+                            <input type="checkbox" id="symmetry-toggle" checked>
+                            <span>对称裁剪</span>
+                        </label>
+                        <div class="brush-size">
+                            <span>剪刀大小:</span>
+                            <input type="range" id="brush-size" min="2" max="20" value="8">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 工具区域 -->
+                <div class="tool-panel">
+                    <h3>剪刀工具</h3>
+                    <div class="tool-options">
+                        <button class="tool-btn active" data-tool="scissors" title="剪刀">
+                            <svg class="scissors-icon" viewBox="0 0 24 24">
+                                <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/>
+                            </svg>
+                        </button>
+                        <button class="tool-btn" data-tool="eraser" title="橡皮擦">
+                            <svg class="eraser-icon" viewBox="0 0 24 24">
+                                <path d="M16.24,3.56L21.19,8.5C21.97,9.29 21.97,10.55 21.19,11.34L12,20.53C10.44,22.09 7.91,22.09 6.34,20.53L2.81,17C2.03,16.21 2.03,14.95 2.81,14.16L13.41,3.56C14.2,2.78 15.46,2.78 16.24,3.56M4.22,15.58L7.76,19.11C8.54,19.9 9.8,19.9 10.59,19.11L14.12,15.58L9.17,10.63L4.22,15.58Z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <button class="btn btn-primary" id="submit-btn">提交作品</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结算界面 -->
+        <div id="result-screen" class="screen">
+            <div class="result-panel">
+                <h2 id="result-title">作品完成！</h2>
+                <div class="result-content">
+                    <div class="result-artwork">
+                        <canvas id="result-canvas" width="300" height="300"></canvas>
+                        <div class="frame-decoration"></div>
+                    </div>
+                    <div class="result-info">
+                        <div class="score-display">
+                            <span class="score-label">相似度</span>
+                            <span class="score-value" id="similarity-score">85%</span>
+                        </div>
+                        <div class="poem-reveal">
+                            <h3>诗句解密</h3>
+                            <p class="revealed-poem" id="revealed-poem">
+                                喜气洋洋抱红鲤，<br>
+                                年年有余福满堂。<br>
+                                剪纸传承千年韵，<br>
+                                中华文化永流芳。
+                            </p>
+                        </div>
+                        <div class="story-unlock">
+                            <h3>解锁生肖故事</h3>
+                            <p id="unlocked-story">
+                                你成功剪出了"年年有余"的吉祥图案！在传统剪纸艺术中，胖娃娃抱着红鲤鱼象征着生活富足、吉祥如意。这个图案常用于春节装饰，表达了人们对美好生活的向往。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-actions">
+                    <button class="btn btn-primary" id="export-btn">导出海报</button>
+                    <button class="btn btn-secondary" id="next-level-btn">下一关</button>
+                    <button class="btn btn-secondary" id="retry-btn">重新挑战</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 暂停菜单 -->
+        <div id="pause-menu" class="screen overlay">
+            <div class="pause-panel">
+                <h2>游戏暂停</h2>
+                <div class="pause-buttons">
+                    <button class="btn btn-primary" id="resume-btn">继续游戏</button>
+                    <button class="btn btn-secondary" id="quit-btn">退出关卡</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 提示面板 -->
+        <div id="hint-panel" class="screen overlay">
+            <div class="hint-panel-content">
+                <h2>💡 提示</h2>
+                <p id="hint-text">尝试从中心开始，剪出圆润的线条，注意对称原则...</p>
+                <button class="btn btn-primary" id="close-hint-btn">知道了</button>
+            </div>
+        </div>
+
+        <!-- 氛围切换按钮 -->
+        <button class="atmosphere-toggle" id="atmosphere-toggle" title="切换氛围">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/levels.js"></script>
+    <script src="js/canvas.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

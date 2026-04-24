@@ -172,8 +172,14 @@
                 </div>
                 
                 <div class="map-container" id="map-container">
-                    <div class="map-placeholder">
-                        <p>地图加载中...</p>
+                    <canvas id="map-canvas" width="600" height="300"></canvas>
+                    <div class="map-controls">
+                        <button class="map-zoom-btn" id="map-zoom-in">+</button>
+                        <button class="map-zoom-btn" id="map-zoom-out">−</button>
+                    </div>
+                    <div class="map-legend" id="map-legend">
+                        <div class="legend-item"><span class="legend-dot current"></span> 当前位置</div>
+                        <div class="legend-item"><span class="legend-dot mission"></span> 任务地点</div>
                     </div>
                 </div>
                 

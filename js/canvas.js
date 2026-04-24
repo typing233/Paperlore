@@ -82,6 +82,10 @@ const PaperCanvas = {
         this.lastX = pos.x;
         this.lastY = pos.y;
         
+        if (window.SmartAssist && SmartAssist.isEnabled) {
+            SmartAssist.startStroke(pos.x, pos.y);
+        }
+        
         this.cutAt(pos.x, pos.y);
     },
     
@@ -89,6 +93,10 @@ const PaperCanvas = {
         if (!this.isDrawing) return;
         
         const pos = this.getMousePos(e);
+        
+        if (window.SmartAssist && SmartAssist.isEnabled) {
+            SmartAssist.addStrokePoint(pos.x, pos.y);
+        }
         
         this.cutLine(this.lastX, this.lastY, pos.x, pos.y);
         
@@ -99,6 +107,11 @@ const PaperCanvas = {
     handleMouseUp: function() {
         if (this.isDrawing) {
             this.isDrawing = false;
+            
+            if (window.SmartAssist && SmartAssist.isEnabled) {
+                SmartAssist.endStroke();
+            }
+            
             this.saveState();
         }
     },

@@ -23,7 +23,11 @@ const Game = {
             gameScreen: document.getElementById('game-screen'),
             resultScreen: document.getElementById('result-screen'),
             pauseMenu: document.getElementById('pause-menu'),
-            hintPanel: document.getElementById('hint-panel')
+            hintPanel: document.getElementById('hint-panel'),
+            aiGenerateScreen: document.getElementById('ai-generate-screen'),
+            photoConvertScreen: document.getElementById('photo-convert-screen'),
+            arScanScreen: document.getElementById('ar-scan-screen'),
+            locationMissionScreen: document.getElementById('location-mission-screen')
         };
         
         this.elements = {
@@ -64,13 +68,55 @@ const Game = {
             hintText: document.getElementById('hint-text'),
             closeHintBtn: document.getElementById('close-hint-btn'),
             
-            atmosphereToggle: document.getElementById('atmosphere-toggle')
+            atmosphereToggle: document.getElementById('atmosphere-toggle'),
+            
+            aiGenerateBtn: document.getElementById('ai-generate-btn'),
+            photoConvertBtn: document.getElementById('photo-convert-btn'),
+            arScanBtn: document.getElementById('ar-scan-btn'),
+            locationMissionBtn: document.getElementById('location-mission-btn'),
+            
+            backToMenuFromAiBtn: document.getElementById('back-to-menu-from-ai-btn'),
+            backToMenuFromPhotoBtn: document.getElementById('back-to-menu-from-photo-btn'),
+            backToMenuFromArBtn: document.getElementById('back-to-menu-from-ar-btn'),
+            backToMenuFromLocationBtn: document.getElementById('back-to-menu-from-location-btn')
         };
     },
     
     bindEvents: function() {
         this.elements.startBtn.addEventListener('click', () => this.showScreen('level-select'));
         this.elements.howToPlayBtn.addEventListener('click', () => this.showScreen('how-to-play'));
+        
+        if (this.elements.aiGenerateBtn) {
+            this.elements.aiGenerateBtn.addEventListener('click', () => this.showScreen('ai-generate'));
+        }
+        if (this.elements.photoConvertBtn) {
+            this.elements.photoConvertBtn.addEventListener('click', () => this.showScreen('photo-convert'));
+        }
+        if (this.elements.arScanBtn) {
+            this.elements.arScanBtn.addEventListener('click', () => this.showScreen('ar-scan'));
+        }
+        if (this.elements.locationMissionBtn) {
+            this.elements.locationMissionBtn.addEventListener('click', () => this.showScreen('location-mission'));
+        }
+        
+        if (this.elements.backToMenuFromAiBtn) {
+            this.elements.backToMenuFromAiBtn.addEventListener('click', () => this.showScreen('main-menu'));
+        }
+        if (this.elements.backToMenuFromPhotoBtn) {
+            this.elements.backToMenuFromPhotoBtn.addEventListener('click', () => this.showScreen('main-menu'));
+        }
+        if (this.elements.backToMenuFromArBtn) {
+            this.elements.backToMenuFromArBtn.addEventListener('click', () => {
+                if (window.ARScanner) {
+                    ARScanner.stopCamera();
+                }
+                this.showScreen('main-menu');
+            });
+        }
+        if (this.elements.backToMenuFromLocationBtn) {
+            this.elements.backToMenuFromLocationBtn.addEventListener('click', () => this.showScreen('main-menu'));
+        }
+        
         this.elements.backToMenuBtn.addEventListener('click', () => this.showScreen('main-menu'));
         this.elements.backToMenuFromLevelsBtn.addEventListener('click', () => this.showScreen('main-menu'));
         
@@ -152,6 +198,9 @@ const Game = {
                 break;
             case 'game-screen':
                 targetScreen = this.screens.gameScreen;
+                if (window.SmartAssist) {
+                    SmartAssist.isEnabled = true;
+                }
                 break;
             case 'result-screen':
                 targetScreen = this.screens.resultScreen;
@@ -161,6 +210,34 @@ const Game = {
                 break;
             case 'hint-panel':
                 targetScreen = this.screens.hintPanel;
+                break;
+            case 'ai-generate':
+                targetScreen = this.screens.aiGenerateScreen;
+                if (window.AIGenerator && !window.AIGenerator._initialized) {
+                    AIGenerator.init();
+                    window.AIGenerator._initialized = true;
+                }
+                break;
+            case 'photo-convert':
+                targetScreen = this.screens.photoConvertScreen;
+                if (window.PhotoConverter && !window.PhotoConverter._initialized) {
+                    PhotoConverter.init();
+                    window.PhotoConverter._initialized = true;
+                }
+                break;
+            case 'ar-scan':
+                targetScreen = this.screens.arScanScreen;
+                if (window.ARScanner && !window.ARScanner._initialized) {
+                    ARScanner.init();
+                    window.ARScanner._initialized = true;
+                }
+                break;
+            case 'location-mission':
+                targetScreen = this.screens.locationMissionScreen;
+                if (window.LocationMission && !window.LocationMission._initialized) {
+                    LocationMission.init();
+                    window.LocationMission._initialized = true;
+                }
                 break;
         }
         

@@ -99,6 +99,15 @@ const PhotoConverter = {
             return;
         }
         
+        const uploadPlaceholder = document.querySelector('.upload-placeholder');
+        if (uploadPlaceholder) {
+            uploadPlaceholder.innerHTML = `
+                <span class="upload-icon">⏳</span>
+                <p>正在加载图片，请稍候...</p>
+                <p class="small-text">文件: ${file.name}</p>
+            `;
+        }
+        
         const reader = new FileReader();
         reader.onload = (event) => {
             const img = new Image();
@@ -106,10 +115,30 @@ const PhotoConverter = {
                 this.originalImage = img;
                 this.displayOriginalImage(img);
                 this.hideResult();
+                this.resetUploadPlaceholder();
+            };
+            img.onerror = () => {
+                alert('图片加载失败，请尝试其他图片。');
+                this.resetUploadPlaceholder();
             };
             img.src = event.target.result;
         };
+        reader.onerror = () => {
+            alert('文件读取失败。');
+            this.resetUploadPlaceholder();
+        };
         reader.readAsDataURL(file);
+    },
+    
+    resetUploadPlaceholder: function() {
+        const uploadPlaceholder = document.querySelector('.upload-placeholder');
+        if (uploadPlaceholder) {
+            uploadPlaceholder.innerHTML = `
+                <span class="upload-icon">📷</span>
+                <p>点击或拖拽上传照片</p>
+                <p class="small-text">支持 JPG、PNG 格式</p>
+            `;
+        }
     },
     
     displayOriginalImage: function(img) {

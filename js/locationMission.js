@@ -121,6 +121,7 @@ const LocationMission = {
     init: function() {
         this.loadProgress();
         this.bindEvents();
+        this.startLocationTracking();
         console.log('位置任务模块初始化完成');
     },
     

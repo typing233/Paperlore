@@ -325,8 +325,12 @@ const Game = {
     
     showHint: function() {
         const level = Levels.getLevelById(this.currentLevel);
-        this.elements.hintText.textContent = level.hint;
-        this.showScreen('hint-panel');
+        if (level) {
+            this.elements.hintText.textContent = level.hint;
+            this.showScreen('hint-panel');
+        } else {
+            alert('当前没有可用的提示。请先选择一个关卡开始游戏。');
+        }
     },
     
     closeHint: function() {

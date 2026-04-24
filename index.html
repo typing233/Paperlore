@@ -16,11 +16,212 @@
                 <p class="subtitle">剪出真相，传承千年</p>
                 <div class="menu-buttons">
                     <button class="btn btn-primary" id="start-btn">开始游戏</button>
+                    <button class="btn btn-secondary" id="ai-generate-btn">AI生成剪纸</button>
+                    <button class="btn btn-secondary" id="photo-convert-btn">照片转剪纸</button>
+                    <button class="btn btn-secondary" id="ar-scan-btn">AR扫描海报</button>
+                    <button class="btn btn-secondary" id="location-mission-btn">位置任务</button>
                     <button class="btn btn-secondary" id="how-to-play-btn">游戏说明</button>
                 </div>
             </div>
         </div>
 
+        <!-- AI生成剪纸界面 -->
+        <div id="ai-generate-screen" class="screen">
+            <div class="ai-generate-panel">
+                <h2>AI生成剪纸线稿</h2>
+                <p class="subtitle">输入关键词，AI为您生成剪纸风格线稿</p>
+                
+                <div class="keyword-input-section">
+                    <input type="text" id="keyword-input" placeholder="请输入关键词，如：月宫玉兔、龙凤呈祥、喜上眉梢...">
+                    <button class="btn btn-primary" id="generate-btn">生成线稿</button>
+                </div>
+                
+                <div class="loading-indicator" id="loading-indicator">
+                    <div class="spinner"></div>
+                    <p>AI正在生成剪纸线稿...</p>
+                </div>
+                
+                <div class="result-section" id="ai-result-section">
+                    <div class="preview-container">
+                        <canvas id="ai-preview-canvas" width="500" height="500"></canvas>
+                        <div class="preview-overlay">
+                            <p>预览：剪纸线稿模板</p>
+                        </div>
+                    </div>
+                    <div class="result-actions">
+                        <button class="btn btn-primary" id="use-template-btn">使用此模板</button>
+                        <button class="btn btn-secondary" id="regenerate-btn">重新生成</button>
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary" id="back-to-menu-from-ai-btn">返回主菜单</button>
+            </div>
+        </div>
+        
+        <!-- 照片转剪纸界面 -->
+        <div id="photo-convert-screen" class="screen">
+            <div class="photo-convert-panel">
+                <h2>照片转剪纸风格</h2>
+                <p class="subtitle">上传照片，AI将其转换为剪纸风格艺术品</p>
+                
+                <div class="upload-section">
+                    <label class="upload-area" id="upload-area">
+                        <input type="file" id="photo-input" accept="image/*">
+                        <div class="upload-placeholder">
+                            <span class="upload-icon">📷</span>
+                            <p>点击或拖拽上传照片</p>
+                            <p class="small-text">支持 JPG、PNG 格式</p>
+                        </div>
+                    </label>
+                </div>
+                
+                <div class="convert-options" id="convert-options">
+                    <div class="option-group">
+                        <label>剪纸风格：</label>
+                        <select id="style-select">
+                            <option value="traditional">传统剪纸</option>
+                            <option value="modern">现代简约</option>
+                            <option value="detailed">精细复杂</option>
+                            <option value="minimal">极简风格</option>
+                        </select>
+                    </div>
+                    <div class="option-group">
+                        <label>细节程度：</label>
+                        <input type="range" id="detail-level" min="1" max="5" value="3">
+                        <span id="detail-value">中</span>
+                    </div>
+                    <button class="btn btn-primary" id="convert-btn">开始转换</button>
+                </div>
+                
+                <div class="converting-indicator" id="converting-indicator">
+                    <div class="spinner"></div>
+                    <p>正在转换为剪纸风格...</p>
+                </div>
+                
+                <div class="photo-result-section" id="photo-result-section">
+                    <div class="before-after">
+                        <div class="before-container">
+                            <h3>原图</h3>
+                            <canvas id="original-photo-canvas" width="400" height="400"></canvas>
+                        </div>
+                        <div class="after-container">
+                            <h3>剪纸风格</h3>
+                            <canvas id="converted-canvas" width="400" height="400"></canvas>
+                        </div>
+                    </div>
+                    <div class="result-actions">
+                        <button class="btn btn-primary" id="edit-converted-btn">在画布中编辑</button>
+                        <button class="btn btn-secondary" id="download-converted-btn">下载剪纸作品</button>
+                        <button class="btn btn-secondary" id="upload-new-btn">上传新照片</button>
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary" id="back-to-menu-from-photo-btn">返回主菜单</button>
+            </div>
+        </div>
+        
+        <!-- AR扫描界面 -->
+        <div id="ar-scan-screen" class="screen">
+            <div class="ar-scan-panel">
+                <h2>AR扫描海报</h2>
+                <p class="subtitle">扫描关卡海报，观看生肖故事动画</p>
+                
+                <div class="camera-container">
+                    <video id="ar-camera" autoplay playsinline></video>
+                    <div class="scan-frame">
+                        <div class="corner top-left"></div>
+                        <div class="corner top-right"></div>
+                        <div class="corner bottom-left"></div>
+                        <div class="corner bottom-right"></div>
+                        <div class="scan-line"></div>
+                    </div>
+                    <canvas id="ar-process-canvas" style="display: none;"></canvas>
+                </div>
+                
+                <div class="ar-status" id="ar-status">
+                    <p>📷 将关卡海报放入扫描框内</p>
+                </div>
+                
+                <div class="ar-result-section" id="ar-result-section">
+                    <div class="animation-container">
+                        <canvas id="animation-canvas" width="600" height="400"></canvas>
+                    </div>
+                    <div class="story-text" id="ar-story-text">
+                        <h3 id="ar-story-title">生肖故事</h3>
+                        <p id="ar-story-content">正在加载故事内容...</p>
+                    </div>
+                </div>
+                
+                <div class="ar-actions">
+                    <button class="btn btn-primary" id="start-camera-btn">启动相机</button>
+                    <button class="btn btn-secondary" id="stop-camera-btn" style="display: none;">停止扫描</button>
+                    <button class="btn btn-secondary" id="back-to-menu-from-ar-btn">返回主菜单</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 位置任务界面 -->
+        <div id="location-mission-screen" class="screen">
+            <div class="location-mission-panel">
+                <h2>位置任务</h2>
+                <p class="subtitle">在特定地点完成剪纸任务，解锁故事碎片</p>
+                
+                <div class="location-status" id="location-status">
+                    <div class="gps-icon">📍</div>
+                    <p id="gps-status-text">正在获取位置信息...</p>
+                </div>
+                
+                <div class="map-container" id="map-container">
+                    <div class="map-placeholder">
+                        <p>地图加载中...</p>
+                    </div>
+                </div>
+                
+                <div class="mission-list" id="mission-list">
+                    <h3>附近任务</h3>
+                    <div class="missions">
+                        <!-- 任务卡片将通过JS动态生成 -->
+                    </div>
+                </div>
+                
+                <div class="collection-panel" id="collection-panel">
+                    <h3>我的收藏</h3>
+                    <div class="badges-collection">
+                        <div class="badge-item locked">
+                            <div class="badge-icon">🔒</div>
+                            <span>故宫徽章</span>
+                        </div>
+                        <div class="badge-item locked">
+                            <div class="badge-icon">🔒</div>
+                            <span>长城徽章</span>
+                        </div>
+                        <div class="badge-item locked">
+                            <div class="badge-icon">🔒</div>
+                            <span>西湖徽章</span>
+                        </div>
+                        <div class="badge-item locked">
+                            <div class="badge-icon">🔒</div>
+                            <span>兵马俑徽章</span>
+                        </div>
+                    </div>
+                    <div class="story-fragments">
+                        <h4>故事碎片</h4>
+                        <div class="fragments">
+                            <div class="fragment-item locked">
+                                <span>碎片 1/12</span>
+                            </div>
+                            <div class="fragment-item locked">
+                                <span>碎片 2/12</span>
+                            </div>
+                            <!-- 更多碎片 -->
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary" id="back-to-menu-from-location-btn">返回主菜单</button>
+            </div>
+        </div>
+        
         <!-- 游戏说明 -->
         <div id="how-to-play" class="screen">
             <div class="instruction-panel">
@@ -41,6 +242,22 @@
                     <div class="instruction-item">
                         <span class="instruction-icon">🐉</span>
                         <p>探索生肖故事，感受中华文化魅力</p>
+                    </div>
+                    <div class="instruction-item">
+                        <span class="instruction-icon">🤖</span>
+                        <p>AI生成剪纸线稿：输入关键词，AI为您生成模板</p>
+                    </div>
+                    <div class="instruction-item">
+                        <span class="instruction-icon">📷</span>
+                        <p>照片转剪纸：上传照片，转换为剪纸风格</p>
+                    </div>
+                    <div class="instruction-item">
+                        <span class="instruction-icon">📱</span>
+                        <p>AR扫描：扫描海报，观看生肖故事动画</p>
+                    </div>
+                    <div class="instruction-item">
+                        <span class="instruction-icon">📍</span>
+                        <p>位置任务：在特定地点完成任务，收集徽章</p>
                     </div>
                 </div>
                 <button class="btn btn-primary" id="back-to-menu-btn">返回</button>
@@ -116,6 +333,35 @@
                             </svg>
                         </button>
                     </div>
+                    
+                    <!-- 智能辅助功能 -->
+                    <div class="smart-assist-panel">
+                        <h4>智能辅助</h4>
+                        <div class="assist-options">
+                            <label class="assist-option">
+                                <input type="checkbox" id="shape-detection-toggle" checked>
+                                <span>图形识别</span>
+                            </label>
+                            <label class="assist-option">
+                                <input type="checkbox" id="line-hint-toggle" checked>
+                                <span>线条提示</span>
+                            </label>
+                            <label class="assist-option">
+                                <input type="checkbox" id="auto-complete-toggle">
+                                <span>辅助绘制</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- 实时分析结果 -->
+                    <div class="analysis-panel" id="analysis-panel">
+                        <h4>实时分析</h4>
+                        <div class="analysis-result" id="analysis-result">
+                            <p class="detected-shape">检测到的图形：<span id="detected-shape-text">无</span></p>
+                            <p class="drawing-hint" id="drawing-hint">提示：<span id="hint-text-content">开始裁剪以获取提示</span></p>
+                        </div>
+                    </div>
+                    
                     <button class="btn btn-primary" id="submit-btn">提交作品</button>
                 </div>
             </div>
@@ -190,6 +436,11 @@
     <script src="js/utils.js"></script>
     <script src="js/levels.js"></script>
     <script src="js/canvas.js"></script>
+    <script src="js/smartAssist.js"></script>
+    <script src="js/aiGenerator.js"></script>
+    <script src="js/photoConverter.js"></script>
+    <script src="js/arScanner.js"></script>
+    <script src="js/locationMission.js"></script>
     <script src="js/game.js"></script>
     <script src="js/main.js"></script>
 </body>
